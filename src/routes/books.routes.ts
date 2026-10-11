@@ -1,16 +1,16 @@
 import { Router, type Request, type Response } from "express";
 import { getMongoDb } from "../db/mongo.js";
 
-export const productsRouter = Router();
+export const booksRouter = Router();
 
-productsRouter.get("/", async (_req: Request, res: Response) => {
+booksRouter.get("/", async (_req: Request, res: Response) => {
   try {
-    const products = await getMongoDb().collection("products").find({}).toArray();
+    const books = await getMongoDb().collection("books").find({}).toArray();
 
     res.json({
       database: "mongodb",
-      count: products.length,
-      data: products,
+      count: books.length,
+      data: books,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -22,31 +22,31 @@ productsRouter.get("/", async (_req: Request, res: Response) => {
   }
 });
 
-productsRouter.post("/", async (req: Request, res: Response) => {
-  const { name, price } = req.body as { name?: unknown; price?: unknown };
+booksRouter.post("/", async (req: Request, res: Response) => {
+  const { title, author } = req.body as {
+    title?: unknown;
+    author?: unknown;
+  };
 
   if (
-    typeof name !== "string" ||
-    name.trim().length === 0 ||
-    typeof price !== "number" ||
-    !Number.isFinite(price) ||
-    price <= 0
+    typeof title !== "string" ||
+    title.trim().length === 0 ||
+    typeof author !== "string" ||
+    author.trim().length === 0
   ) {
     res.status(400).json({
-      message: "name and a positive price are required",
+      message: "title and author are required",
     });
     return;
   }
 
   try {
     const doc = {
-      name: name.trim(),
-      price,
+      title: title.trim(),
+      author: author.trim(),
       createdAt: new Date(),
     };
-    const result = await getMongoDb()
-      .collection("products")
-      .insertOne(doc);
+    const result = await getMongoDb().collection("books").insertOne(doc);
 
     res.status(201).json({
       database: "mongodb",

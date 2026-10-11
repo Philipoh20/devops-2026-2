@@ -64,8 +64,8 @@ npm start
 | GET | `/api/mongo/health` | Health de MongoDB |
 | GET | `/api/mongo/users` | Lista usuarios (Mongo) |
 | POST | `/api/mongo/users` | Crea usuario (Mongo) |
-| GET | `/api/products` | Lista productos (Mongo) |
-| POST | `/api/products` | Crea producto (Mongo) |
+| GET | `/api/books` | Lista libros (Mongo) |
+| POST | `/api/books` | Crea libro (Mongo) |
 
 ### Ejemplos
 
@@ -82,9 +82,9 @@ curl -X POST http://localhost:3000/api/mongo/users ^
   -H "Content-Type: application/json" ^
   -d "{\"name\":\"Luis\",\"email\":\"luis@example.com\"}"
 
-curl -X POST http://localhost:3000/api/products ^
+curl -X POST http://localhost:3000/api/books ^
   -H "Content-Type: application/json" ^
-  -d "{\"name\":\"Teclado\",\"price\":120000}"
+  -d "{\"title\":\"El principito\",\"author\":\"Antoine de Saint-Exupery\"}"
 ```
 
 Body esperado en POST `/users`:

@@ -23,37 +23,37 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 
-describe("Products endpoints", () => {
-  it("POST /api/products crea un producto y responde 201", async () => {
-    mongoInsertOne.mockResolvedValueOnce({ insertedId: "product-123" });
+describe("Books endpoints", () => {
+  it("POST /api/books crea un libro y responde 201", async () => {
+    mongoInsertOne.mockResolvedValueOnce({ insertedId: "book-123" });
 
     const res = await request(app)
-      .post("/api/products")
-      .send({ name: "Teclado", price: 120000 });
+      .post("/api/books")
+      .send({ title: "El principito", author: "Antoine de Saint-Exupery" });
 
     expect(res.status).toBe(201);
     expect(res.body.database).toBe("mongodb");
     expect(res.body.data).toMatchObject({
-      _id: "product-123",
-      name: "Teclado",
-      price: 120000,
+      _id: "book-123",
+      title: "El principito",
+      author: "Antoine de Saint-Exupery",
     });
     expect(mongoInsertOne).toHaveBeenCalledWith({
-      name: "Teclado",
-      price: 120000,
+      title: "El principito",
+      author: "Antoine de Saint-Exupery",
       createdAt: expect.any(Date),
     });
     expect(mongoInsertOne).toHaveBeenCalledOnce();
   });
 
-  it("POST /api/products sin precio responde 400", async () => {
+  it("POST /api/books sin autor responde 400", async () => {
     const res = await request(app)
-      .post("/api/products")
-      .send({ name: "Teclado" });
+      .post("/api/books")
+      .send({ title: "El principito" });
 
     expect(res.status).toBe(400);
     expect(res.body).toEqual({
-      message: "name and a positive price are required",
+      message: "title and author are required",
     });
     expect(mongoInsertOne).not.toHaveBeenCalled();
   });
